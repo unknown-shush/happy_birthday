@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ A Grand Surprise for Jagan Raju ✨</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Load Tone.js for sound effects --><script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        /* Aesthetic Palette: Deep Space, Nebula Purple, Stardust Gold, Comet Silver */
+        :root {
+            --bg-dark: #0A0A1A;
+            --color-purple: #9B59B6; /* Deep Purple */
+            --color-gold: #FFD700;   /* Stardust Gold */
+            --color-silver: #BDC3C7; /* Comet Silver */
+            --glow-color: #A7C5F7; /* Lighter blue-purple for name glow */
+        }
+
+        /* Base styles */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Initial, tighter gradient */
+            background: radial-gradient(circle at top left, #1C0F35 0%, var(--bg-dark) 100%);
+            color: var(--color-silver);
+            overflow: auto; 
+            transition: background 1.5s ease;
+        }
+
+        /* New class for dramatic background shift on first click */
+        body.stage-1-active {
+            /* Wider, brighter gradient when activated */
+            background: radial-gradient(circle at center, #2A1055 0%, var(--bg-dark) 80%);
+            transition: background 2.0s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* --- STAGE 1 BURST/FLASH EFFECT --- */
+        @keyframes nebulaFlash {
+            0% { box-shadow: 0 0 0 0 rgba(155, 89, 182, 0); }
+            50% { box-shadow: 0 0 150px 70px rgba(155, 89, 182, 0.6); } /* Nebula Flash */
+            100% { box-shadow: 0 0 0 0 rgba(155, 89, 182, 0); }
+        }
+        body.nebula-flash-active {
+            animation: nebulaFlash 1.0s ease-out;
+        }
+
+        /* --- BURST-OPEN EFFECT (Used for content wrapper, subtle) --- */
+        #content-reveal-wrapper {
+            clip-path: circle(0% at 50% 50%);
+            transition: clip-path 2.0s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 10; 
+        }
+        #content-reveal-wrapper.opening-reveal {
+            clip-path: circle(150% at 50% 50%);
+        }
+        
+        /* --- DOUBLE-DOOR GATE EFFECT --- */
+        .gate-panel {
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            width: 50vw;
+            background: #1C0F35; 
+            z-index: 500; 
+            /* Added inner shadow and subtle gold glow to gates */
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 215, 0, 0.2);
+            transition: transform 2.0s cubic-bezier(0.785, 0.135, 0.15, 0.86); 
+        }
+
+        #gate-left {
+            left: 0;
+            transform: translateX(0);
+            border-right: 3px solid var(--color-gold);
+        }
+
+        #gate-right {
+            right: 0;
+            transform: translateX(0);
+            border-left: 3px solid var(--color-gold);
+        }
+
+        .gate-open #gate-left {
+            transform: translateX(-100%) scale(0.9);
+        }
+
+        .gate-open #gate-right {
+            transform: translateX(100%) scale(0.9);
+        }
+        /* ----------------------------------- */
+
+        /* Main Card Container Styles */
+        .surprise-container {
+            position: relative;
+            background-color: rgba(15, 10, 26, 0.95); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 70px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px); 
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.6s ease;
+        }
+
+        /* Initial Box/Button Styles */
+        .initial-trigger {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s;
+            z-index: 600; 
+            position: relative;
+        }
+        .initial-trigger:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(155, 89, 182, 0.5); 
+        }
+        .initial-trigger:active {
+            transform: scale(0.98);
+        }
+
+        /* Pulsating Button */
+        .btn-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(155, 89, 182, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(155, 89, 182, 0); }
+        }
+
+        /* Name Reveal Styling */
+        #jagan-name {
+            font-family: 'Playfair Display', serif;
+            color: var(--color-gold);
+            /* Removed typewriter text-shadow and moved to specific span style */
+        }
+        
+        /* NEW: Split Name Styles */
+        #jagan-name span {
+            display: inline-block;
+            opacity: 0;
+            transform: scale(0.5) translateY(50px);
+            transition: opacity 0.3s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 0 0 15px var(--glow-color), 0 0 30px var(--glow-color); /* Persistent glow */
+        }
+        .letter-revealed {
+            opacity: 1 !important;
+            transform: scale(1) translateY(0) !important;
+            animation: pulseNameGlow 2.5s infinite alternate;
+        }
+        
+        @keyframes pulseNameGlow {
+            0% { text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color); }
+            100% { text-shadow: 0 0 20px var(--color-gold), 0 0 40px var(--glow-color); }
+        }
+
+        /* --- STAGE 2 CONTENT REVEAL (BOOM/POP-IN EFFECTS) --- */
+        
+        /* 1. Content for Stage 2 initially hidden (applies to greeting, photo section heading, unlock button wrapper) */
+        .content-hidden-stage2 {
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .content-pop-in {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* 2. Photo specific hidden style (MODIFIED FOR 3D FLIP) */
+        .photo-hidden {
+            opacity: 0;
+            /* Start invisible and rotated back (3D flip effect) */
+            transform: scale(0.8) rotateX(-90deg); 
+            transform-origin: center top; 
+            transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .photo-pop-in {
+            opacity: 1;
+            transform: scale(1) rotateX(0deg); /* Flip back to normal */
+        }
+
+        /* --- PROPER PHOTO LAYOUT STYLES (Staggered Grid) --- */
+        .photo-grid-jagan {
+            display: grid;
+            gap: 1.5rem; 
+            grid-template-columns: 1fr;
+            perspective: 1500px; /* Crucial for realistic 3D effect */
+            transform-style: preserve-3d; 
+        }
+        @media (min-width: 640px) { 
+            .photo-grid-jagan {
+                grid-template-columns: 1fr 1fr;
+            }
+            /* Staggering uses translateY for layout structure, which is combined with the flip animation */
+            #card-photo-2 { transform: translateY(30px); } 
+            #card-photo-3 { transform: translateY(-30px); } 
+        }
+
+        /* Photo Cards with Descriptions */
+        .photo-card-wrapper {
+            position: relative;
+            overflow: hidden;
+            /* Ensures 3D child transform works */
+            transform-style: preserve-3d;
+        }
+        .photo-card {
+            border: 3px solid var(--color-purple);
+            filter: grayscale(80%);
+            transition: all 0.4s ease-in-out;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transform: scale(0.98);
+        }
+        .photo-card:hover {
+            filter: grayscale(0%);
+            transform: scale(1.05) rotate(1deg); 
+            border-color: var(--color-gold);
+            box-shadow: 0 10px 30px rgba(155, 89, 182, 0.6);
+            z-index: 10;
+        }
+        .photo-description {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 100%);
+            color: var(--color-silver);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.4s ease-in-out;
+            pointer-events: none;
+        }
+        .photo-card-wrapper:hover .photo-description {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- STAGE 3: FINAL MESSAGE REVEAL (ENHANCED) --- */
+        
+        #final-message-area {
+            opacity: 0;
+            transform: scale(0.8) translateY(-20px);
+            border: 2px dashed var(--color-gold);
+            background-color: rgba(255, 215, 0, 0.08); 
+        }
+        .message-card-reveal {
+            /* Explosive, bouncy entrance */
+            animation: revealMessage 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+        @keyframes revealMessage {
+            0% { opacity: 0; transform: scale(0.3) translateY(-100px); }
+            60% { opacity: 1; transform: scale(1.05); } /* Overshoot */
+            80% { transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Pulsing Glow Effect (Short for initial button click) */
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px var(--color-gold); }
+            50% { box-shadow: 0 0 30px var(--color-gold); }
+            100% { box-shadow: 0 0 5px var(--color-gold); }
+        }
+        .message-glow-active {
+            animation: pulseGlow 0.4s ease-in-out infinite alternate;
+        }
+
+        /* Pulsing Glow Effect (Long for final completion) */
+        @keyframes pulseGlowLong {
+            0% { box-shadow: 0 0 5px var(--color-gold); }
+            50% { box-shadow: 0 0 40px var(--color-gold), 0 0 60px var(--glow-color); }
+            100% { box-shadow: 0 0 5px var(--color-gold); }
+        }
+        .message-glow-active-long {
+            animation: pulseGlowLong 1.0s ease-out;
+        }
+
+        /* Grand Finale Screen Pulse Effect */
+        @keyframes screenPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+            50% { box-shadow: 0 0 100px 50px rgba(255, 215, 0, 0.5); } /* A bright gold flash */
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        body.final-pulse {
+            animation: screenPulse 0.8s ease-out;
+        }
+
+
+        /* Inner Text Reveal */
+        .message-text-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .message-text-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* --- END STAGE 3 ENHANCEMENTS --- */
+
+
+        /* Custom scrollbar for aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-purple);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gold);
+        }
+        
+        /* Custom Confetti Style */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Generic cool button style */
+        .cool-btn {
+            background: linear-gradient(45deg, var(--color-purple), #5B21AA);
+            color: white;
+            border: 2px solid var(--color-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- INITIAL PAGE DECORATIONS (RIBBON BANNERS) --- */
+        .ribbon-banner {
+            position: absolute;
+            width: 150px;
+            height: 8px;
+            background: linear-gradient(90deg, var(--color-gold) 0%, rgba(255, 215, 0, 0.5) 50%, transparent 100%);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            transition: all 0.5s ease-out;
+            z-index: 590; /* Below the button, above gates */
+            border-radius: 4px;
+        }
+        #ribbon-1 {
+            top: 25%;
+            left: 10%;
+            transform: rotate(-30deg);
+        }
+        #ribbon-2 {
+            bottom: 25%;
+            right: 10%;
+            transform: rotate(30deg);
+        }
+        /* Mobile adjustment */
+        @media (max-width: 640px) {
+            #ribbon-1 { top: 15%; left: 5%; width: 100px; }
+            #ribbon-2 { bottom: 15%; right: 5%; width: 100px; }
+        }
+
+        /* --- STARFIELD BACKGROUND DECORATION --- */
+        /* Animation for subtle floating stardust */
+        @keyframes floatStars {
+            0% { transform: translate(0, 0); opacity: 0.8; }
+            50% { transform: translate(10px, 15px); opacity: 0.5; }
+            100% { transform: translate(0, 0); opacity: 0.8; }
+        }
+
+        .starfield-decoration {
+            position: fixed;
+            inset: 0;
+            z-index: 490; /* Below the gates and the button */
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: var(--color-gold);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--glow-color);
+            animation: floatStars 10s ease-in-out infinite alternate;
+        }
+        /* Specific star positioning and delay setup handled in JS */
+    </style>
+</head>
+<body>
+    
+    <!-- NEW: STARFIELD DECORATION CONTAINER -->
+    <div id="starfield" class="starfield-decoration"></div>
+
+    <!-- NEW: Full-screen Curtain Overlay for dramatic transition (Used on 2nd click) -->
+    <div id="curtain-overlay" class="fixed inset-0 z-50 transform translate-x-0 transition-none hidden"></div>
+
+    <!-- NEW: DOUBLE DOOR GATES (Used on 1st click) -->
+    <div id="gates-wrapper" class="fixed inset-0 pointer-events-none">
+        <div id="gate-left" class="gate-panel"></div>
+        <div id="gate-right" class="gate-panel"></div>
+    </div>
+
+    <main id="app-container" class="p-4 w-full max-w-3xl">
+        
+        <!-- STAGE 0: THE INITIAL BUTTON (Visible on load) -->
+        <div id="initial-trigger-wrapper" class="flex justify-center items-center w-full min-h-screen relative">
+            
+            <!-- ADDED RIBBON BANNERS (Positioned relative to this centered container) -->
+            <div id="ribbon-1" class="ribbon-banner"></div>
+            <div id="ribbon-2" class="ribbon-banner"></div>
+
+            <div class="z-600 text-center">
+                <!-- Pre-content title derived from page title -->
+                <p class="text-xs sm:text-sm font-light uppercase tracking-widest mb-2 text-purple-400 opacity-80">
+                    Awaits within the gate
+                </p>
+                <h1 class="text-4xl sm:text-5xl font-extrabold mb-8 text-white" style="text-shadow: 0 0 10px #9B59B6;">
+                    A Grand Surprise
+                </h1>
+
+                <button id="initial-trigger-button" class="initial-trigger cool-btn btn-pulse font-extrabold py-5 px-10 rounded-full text-2xl shadow-xl w-full max-w-sm">
+                    Open Your Birthday Surprise
+                </button>
+            </div>
+        </div>
+
+        <!-- STAGE 1, 2, 3: CONTENT THAT BURSTS OPEN (Hidden initially by CSS clip-path) -->
+        <div id="content-reveal-wrapper" class="w-full">
+            
+            <!-- Stage 1 Content: Name Reveal & Next Button -->
+            <div id="jagan-name-reveal" class="mt-12 text-center">
+                <p class="text-2xl font-light text-gray-400 mb-4">A Celebration Begins for...</p>
+                <!-- Name will be dynamically filled with <span> elements by JavaScript -->
+                <h1 id="jagan-name" class="text-7xl font-extrabold leading-tight"></h1>
+                <p class="text-xl font-light text-gray-400 mt-4 mb-8">Ready for the main event?</p>
+                <button id="proceed-to-card-button" class="cool-btn font-extrabold py-4 px-8 rounded-full text-xl shadow-lg w-full max-w-xs btn-pulse hidden">
+                    Reveal the Main Card
+                </button>
+            </div>
+
+            <!-- Stage 2 & 3: Main Card with Photos and Unlocked Message -->
+            <div id="birthday-card" class="hidden surprise-container p-8 sm:p-12 rounded-3xl">
+                <div class="card-content-reveal space-y-10">
+                    
+                    <!-- NEW: Main Aesthetic Greeting (Hidden initially for sequential reveal) -->
+                    <div id="main-greeting-container" class="text-center content-hidden-stage2">
+                        <h2 class="text-6xl sm:text-7xl font-extrabold tracking-tight text-color-gold text-shadow-lg">
+                            HAPPY BIRTHDAY!
+                        </h2>
+                        <h3 class="text-3xl font-light text-gray-200 mt-2">
+                            To a true force of nature, Jagan Raju.
+                        </h3>
+                    </div>
+
+                    <hr class="border-gray-700/50">
+
+                    <!-- Stage 2: Photo Montage (Aesthetic Display) with Descriptions -->
+                    <div id="photo-montage-stage" class="photo-section space-y-8">
+                        <h4 id="photo-section-heading" class="text-2xl font-bold text-gray-100 mb-8 text-center border-b border-purple-500 pb-3 content-hidden-stage2">
+                            Moments, Memories, & The Essence of Jagan
+                        </h4>
+                        
+                        <!-- --- IMPROVED PHOTO LAYOUT (NOW 3D FLIP) --- -->
+                        <div class="photo-grid-jagan">
+                            <!-- Photo Card 1 (Add initial hidden class) -->
+                            <div id="card-photo-1" class="photo-card-wrapper photo-hidden">
+                                <img src="https://i.postimg.cc/K8zjGp4Y/Whats-App-Image-2025-11-10-at-18-33-38-40c18da8.jpg" 
+                                    alt="Jagan Raju Photo 1" 
+                                    class="photo-card w-full h-auto object-cover rounded-xl"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x300/0A0A1A/9B59B6?text=Image+1+Missing';"
+                                >
+                                <div class="photo-description text-sm rounded-b-xl">
+                                    <h5 class="font-bold text-base text-color-gold mb-1">The Trailblazer</h5>
+                                    <p>Captures his dynamic spirit and readiness to embrace new paths. A true leader who always inspires action with unique flair.</p>
+                                </div>
+                            </div>
+
+                            <!-- Photo Card 2 (Add initial hidden class) -->
+                            <div id="card-photo-2" class="photo-card-wrapper photo-hidden">
+                                <img src="https://i.postimg.cc/P59XttBN/Whats-App-Image-2025-11-10-at-18-33-39-080023da.jpg" 
+                                    alt="Jagan Raju Photo 2" 
+                                    class="photo-card w-full h-auto object-cover rounded-xl"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x300/0A0A1A/9B59B6?text=Image+2+Missing';"
+                                >
+                                <div class="photo-description text-sm rounded-b-xl">
+                                    <h5 class="font-bold text-base text-color-gold mb-1">The Visionary</h5>
+                                    <p>Reflecting his insightful gaze and thoughtful nature. Jagan sees beyond the obvious, crafting his own unique style and future.</p>
+                                </div>
+                            </div>
+
+                            <!-- Photo Card 3 (Add initial hidden class) -->
+                            <div id="card-photo-3" class="photo-card-wrapper photo-hidden">
+                                <img src="https://i.postimg.cc/gcVH8jsG/Whats-App-Image-2025-11-10-at-18-33-40-d3f18201.jpg" 
+                                    alt="Jagan Raju Photo 3" 
+                                    class="photo-card w-full h-auto object-cover rounded-xl"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x300/0A0A1A/9B59B6?text=Image+3+Missing';"
+                                >
+                                <div class="photo-description text-sm rounded-b-xl">
+                                    <h5 class="font-bold text-base text-color-gold mb-1">The Architect of Cool</h5>
+                                    <p>A representation of his distinct aesthetic. He doesn't just follow trends; he sets them, with an understated confidence and innate coolness.</p>
+                                </div>
+                            </div>
+
+                            <!-- Photo Card 4 (Add initial hidden class) -->
+                            <div id="card-photo-4" class="photo-card-wrapper photo-hidden">
+                                <img src="https://i.postimg.cc/XvBwJYXj/Whats-App-Image-2025-11-10-at-18-33-43-7267ad3c.jpg" 
+                                    alt="Jagan Raju Photo 4" 
+                                    class="photo-card w-full h-auto object-cover rounded-xl"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x300/0A0A1A/9B59B6?text=Image+4+Missing';"
+                                >
+                                <div class="photo-description text-sm rounded-b-xl">
+                                    <h5 class="font-bold text-base text-color-gold mb-1">The Radiant Spirit</h5>
+                                    <p>This showcases the warmth and vibrant energy he brings to every moment. His presence truly lights up the room and those around him.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Unlock Button Wrapper (Hidden initially for sequential reveal) -->
+                        <div id="unlock-button-wrapper" class="text-center pt-8 content-hidden-stage2">
+                            <button id="unlock-final-message-button" class="cool-btn font-extrabold py-4 px-8 rounded-full text-xl shadow-lg w-full sm:w-auto btn-pulse">
+                                REVEAL THE FINAL WISH
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stage 3: Hidden Final Message Area (UPDATED STRUCTURE FOR STAGGERED TEXT) -->
+                    <div id="final-message-area" class="hidden mt-8 p-6 rounded-xl">
+                        <!-- The paragraph inside is now emptied by JS on load and typed out later -->
+                        <div id="message-text-quote">
+                            <p class="text-2xl font-light text-gray-50 italic">
+                                &ldquo;To Jagan Raju, the friend who consistently inspires and brings a unique energy to everything. Every year with you is an adventure, a masterclass in living life with style and substance. May this new chapter bring even more triumphs, unforgettable moments, and the boundless joy you so richly deserve. Keep shining brightly, for you truly are one of a kind!&rdquo;
+                            </p>
+                        </div>
+                        <!-- Signature fades in after typing is complete -->
+                        <div id="message-text-signature" class="mt-4 text-sm font-semibold text-purple-300 message-text-hidden">
+                            — Your Best Friend, Always.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- CONSTANTS AND SETUP ---
+        const initialTriggerButton = document.getElementById('initial-trigger-button');
+        const initialTriggerWrapper = document.getElementById('initial-trigger-wrapper'); 
+        const contentRevealWrapper = document.getElementById('content-reveal-wrapper');
+        const gatesWrapper = document.getElementById('gates-wrapper'); 
+        const jaganNameReveal = document.getElementById('jagan-name-reveal');
+        const jaganNameElement = document.getElementById('jagan-name');
+        const proceedToCardButton = document.getElementById('proceed-to-card-button');
+        const birthdayCard = document.getElementById('birthday-card');
+        const unlockFinalMessageButton = document.getElementById('unlock-final-message-button');
+        const finalMessageArea = document.getElementById('final-message-area');
+        const appContainer = document.getElementById('app-container');
+        const curtainOverlay = document.getElementById('curtain-overlay');
+        const mainGreetingContainer = document.getElementById('main-greeting-container');
+        const photoSectionHeading = document.getElementById('photo-section-heading');
+        const unlockButtonWrapper = document.getElementById('unlock-button-wrapper');
+        const ribbon1 = document.getElementById('ribbon-1');
+        const ribbon2 = document.getElementById('ribbon-2');
+        const messageTextQuote = document.getElementById('message-text-quote');
+        const messageTextSignature = document.getElementById('message-text-signature');
+        const starfield = document.getElementById('starfield');
+
+
+        const confettiColors = ['#9B59B6', '#FFD700', '#F0B8B8', '#A7C5F7', '#C2FFD9', '#E0BBE4'];
+        const numConfetti = 150; 
+        
+        // Setup Tone.js Synth
+        let synth;
+        try {
+            // Using Tone.MembraneSynth for a short, punchy, 'boom' sound
+            synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: "triangle" },
+                envelope: {
+                    attack: 0.01,
+                    decay: 0.2,
+                    sustain: 0.1,
+                    release: 0.5
+                }
+            }).toDestination();
+            console.log("Tone.js initialized successfully.");
+        } catch (error) {
+            console.error("Tone.js failed to initialize:", error);
+            synth = { triggerAttackRelease: () => {} }; 
+        }
+
+        // --- GLOBAL VARIABLE FOR QUOTE CONTENT ---
+        let quoteTextContent = '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const quoteElement = messageTextQuote.querySelector('p');
+            if (quoteElement) {
+                // Store innerHTML to preserve HTML entities like &ldquo;
+                quoteTextContent = quoteElement.innerHTML.trim();
+                // Clear the content so the typewriter can fill it later
+                quoteElement.innerHTML = '';
+            }
+            // Initialize starfield on load
+            createStarfield(80);
+        });
+
+        // --- NEW: Starfield Creation ---
+        function createStarfield(count) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                // Random position
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                // Random size (1px to 3px)
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                // Random animation delay and duration for variation
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                star.style.animationDuration = `${10 + Math.random() * 10}s`;
+                starfield.appendChild(star);
+            }
+        }
+
+
+        // --- SURPRISE: Name Letter Reveal Animation ---
+        function nameLetterReveal(element, name) {
+            const letters = name.trim().split('');
+            let html = '';
+            letters.forEach(letter => {
+                if (letter === ' ') {
+                    html += '<span style="width: 1rem;"> </span>'; // Add a space
+                } else {
+                    html += `<span>${letter}</span>`;
+                }
+            });
+            element.innerHTML = html;
+
+            const spans = element.querySelectorAll('span');
+            spans.forEach((span, index) => {
+                // Stagger the reveal of each letter
+                setTimeout(() => {
+                    // Use a temporary style override for the initial bounce effect
+                    span.classList.add('letter-revealed');
+                }, index * 100);
+            });
+
+            // After all letters are revealed, show the proceed button
+            setTimeout(() => {
+                proceedToCardButton.classList.remove('hidden');
+                proceedToCardButton.classList.add('btn-pulse');
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, letters.length * 100 + 500);
+        }
+        
+        // --- Grand Finale Effect (Called after typing is done) ---
+        function triggerGrandFinale() {
+            // 1. Massive confetti burst (300 pieces)
+            triggerConfetti(300); 
+            
+            // 2. Screen pulse effect
+            document.body.classList.add('final-pulse');
+            setTimeout(() => {
+                document.body.classList.remove('final-pulse');
+            }, 800); 
+
+            // 3. Play a final, more intense chime
+            try {
+                // Complex major chord for celebratory feeling
+                const now = Tone.now();
+                synth.triggerAttackRelease(["C5", "E5", "G5", "B5"], "0.5", now, 0.9);
+                synth.triggerAttackRelease("C6", "0.1", now + 0.3, 1.0); // Extra ping on top
+            } catch (e) { console.error("Final Grand Chime failed.", e); }
+
+            // 4. Apply a visible border pulse to the message area that lasts longer
+            finalMessageArea.classList.add('message-glow-active-long');
+            setTimeout(() => {
+                finalMessageArea.classList.remove('message-glow-active-long');
+            }, 1000);
+        }
+
+        // --- Typewriter Effect for Final Quote (with completion callback) ---
+        function typewriterQuoteEffect(containerElement, text, speed = 40, onComplete) {
+            const p = containerElement.querySelector('p');
+            p.innerHTML = ''; 
+            
+            // The container is already visible due to the card reveal animation.
+            // Ensure the text container is ready to accept text
+            p.style.opacity = 1; 
+
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    p.innerHTML += text.charAt(i); // Use innerHTML to preserve quote marks/entities
+                    i++;
+                    setTimeout(type, speed); 
+                } else {
+                    // Once typing is complete, reveal the signature
+                    setTimeout(() => {
+                        messageTextSignature.classList.remove('message-text-hidden');
+                        messageTextSignature.classList.add('message-text-visible');
+                        
+                        // Execute callback after signature reveals
+                        if (onComplete && typeof onComplete === 'function') {
+                            onComplete();
+                        }
+                    }, 500);
+                }
+            }
+            type();
+        }
+
+        // --- SOUND EFFECT LOGIC ---
+        function playInitialChime() {
+            try {
+                const notes = ["C4", "E4", "G4", "C5"]; 
+                const now = Tone.now();
+                notes.forEach((note, index) => {
+                    synth.triggerAttackRelease(note, "8n", now + index * 0.1, 0.7);
+                });
+            } catch (e) { console.error("Sound playback failed.", e); }
+        }
+        
+        // NEW: Gate Burst Sound
+        function playGateBurstChime() {
+            try {
+                const now = Tone.now();
+                // Deep, resonant, and high notes for a "whoosh" and "ping" effect
+                synth.triggerAttackRelease(["C2", "G3"], "0.5", now, 0.5);
+                synth.triggerAttackRelease(["C5", "E5", "G5"], "0.2", now + 0.1, 0.8);
+            } catch (e) { console.error("Gate burst sound failed.", e); }
+        }
+
+        function playAestheticChime() {
+            try {
+                const notes = ["G4", "Bb4", "D5", "G5"]; 
+                const now = Tone.now();
+                notes.forEach((note, index) => {
+                    synth.triggerAttackRelease(note, "8n", now + index * 0.1, 0.5);
+                });
+            } catch (e) { console.error("Sound playback failed.", e); }
+        }
+
+        function playShortBoomChime() {
+            try {
+                // Short, low, punchy sound
+                synth.triggerAttackRelease("C3", "0.2", Tone.now(), 0.8);
+            } catch (e) { console.error("Boom sound failed.", e); }
+        }
+
+        function playMessageEntranceChime() {
+            try {
+                // Lighter chime for when the message area appears
+                synth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "1n", Tone.now(), 0.7); 
+            } catch (e) { console.error("Sound playback failed.", e); }
+        }
+
+        // --- CONFETTI LOGIC (SHOWER EFFECT) ---
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            
+            const duration = 4.0 + Math.random() * 2.0; 
+            
+            const startX = Math.random() * window.innerWidth;
+            const finalY = window.innerHeight * 1.2; 
+            const rotation = Math.random() * 720; 
+
+            confetti.style.transition = `transform ${duration}s linear, opacity 0.5s ease ${duration - 0.5}s`; 
+            confetti.style.opacity = 1;
+            
+            confetti.style.top = `-20px`; 
+            confetti.style.left = `${startX}px`;
+            
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.style.transform = `translateY(${finalY}px) rotate(${rotation}deg)`;
+                confetti.style.opacity = 0;
+            }, 10);
+
+            setTimeout(() => confetti.remove(), duration * 1000);
+        }
+
+        function triggerConfetti(count = 150) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(createConfetti, i * 10); 
+            }
+        }
+        
+        // --- STAGE PROGRESSION LOGIC ---
+
+        // Stage 1: Initial Button Click -> Start Typewriter Effect
+        initialTriggerButton.addEventListener('click', async () => {
+            try { await Tone.start(); } catch(e) { console.error("Tone.js Context Start Failed", e); } 
+            
+            initialTriggerWrapper.style.opacity = '0';
+            
+            // Remove banners explicitly (they are children of the fading wrapper)
+            ribbon1.remove();
+            ribbon2.remove();
+
+            document.body.classList.add('stage-1-active');
+            contentRevealWrapper.classList.add('opening-reveal'); 
+            gatesWrapper.classList.add('gate-open');
+            
+            playInitialChime();
+            triggerConfetti(50); // Light initial confetti
+            
+            // Trigger name reveal AFTER the gates start opening
+            setTimeout(() => {
+                document.body.classList.add('nebula-flash-active');
+                playGateBurstChime();
+                nameLetterReveal(jaganNameElement, 'JAGAN RAJU'); 
+            }, 1000); // 1 second delay to sync with gate opening
+
+            setTimeout(() => {
+                gatesWrapper.remove();
+                initialTriggerWrapper.remove();
+                document.body.classList.remove('nebula-flash-active');
+            }, 2000);
+        });
+
+        // Stage 2: Proceed to Card Button Click -> Dramatic Curtain Reveal + Sequential Reveal
+        proceedToCardButton.addEventListener('click', () => {
+            jaganNameReveal.classList.add('hidden'); 
+            
+            // 1. Show the curtain overlay
+            curtainOverlay.classList.remove('hidden');
+            
+            playAestheticChime();
+            triggerConfetti(100);
+
+            // 2. Animate the curtain to slide out
+            setTimeout(() => {
+                curtainOverlay.classList.add('curtain-slide-out');
+            }, 50);
+
+            // 3. Wait for curtain to slide partially, then reveal the card
+            setTimeout(() => {
+                birthdayCard.classList.remove('hidden'); 
+                appContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // --- NEW SEQUENTIAL REVEAL LOGIC STARTS HERE ---
+                let delay = 0;
+                
+                // 3.1. Reveal Main Greeting Text (Boom!)
+                setTimeout(() => {
+                    mainGreetingContainer.classList.remove('content-hidden-stage2');
+                    mainGreetingContainer.classList.add('content-pop-in');
+                    playShortBoomChime(); // Boom sound
+                }, delay);
+                delay += 800; // Delay for text boom + user comprehension
+
+                // 3.2. Reveal Photo Section Heading
+                setTimeout(() => {
+                    photoSectionHeading.classList.remove('content-hidden-stage2');
+                    photoSectionHeading.classList.add('content-pop-in');
+                }, delay);
+                delay += 300;
+
+                // 3.3. Reveal Photos Sequentially
+                const photos = document.querySelectorAll('.photo-hidden');
+                photos.forEach((photo, index) => {
+                    setTimeout(() => {
+                        photo.classList.remove('photo-hidden');
+                        photo.classList.add('photo-pop-in');
+                    }, delay + (index * 300)); // Increased stagger time to 300ms for dramatic 3D flip
+                });
+                delay += (photos.length * 300) + 100; // Wait for all photos + small buffer
+
+                // 3.4. Reveal Unlock Button
+                setTimeout(() => {
+                    unlockButtonWrapper.classList.remove('content-hidden-stage2');
+                    unlockButtonWrapper.classList.add('content-pop-in');
+                }, delay);
+                
+            }, 600); 
+
+            // 4. Remove the curtain element once transition is complete
+            setTimeout(() => {
+                curtainOverlay.remove();
+            }, 1250);
+        });
+
+        // Stage 3: Unlock Final Message Button Click -> Reveal Final Text (ENHANCED & TYPED)
+        unlockFinalMessageButton.addEventListener('click', () => {
+            if (unlockFinalMessageButton.disabled) return;
+            
+            unlockFinalMessageButton.disabled = true;
+            unlockFinalMessageButton.textContent = "Final Wish Granted!";
+            unlockFinalMessageButton.classList.add('opacity-50');
+            unlockFinalMessageButton.classList.remove('btn-pulse');
+
+            playMessageEntranceChime(); // Play the entrance chime
+            triggerConfetti(50); // Small initial burst on click
+
+            finalMessageArea.classList.remove('hidden'); 
+            
+            // 1. Apply the dramatic card reveal animation
+            finalMessageArea.classList.add('message-card-reveal');
+
+            // 2. Apply a temporary glowing border effect
+            finalMessageArea.classList.add('message-glow-active');
+            setTimeout(() => {
+                finalMessageArea.classList.remove('message-glow-active');
+            }, 1200); 
+
+            // 3. Start the typewriter effect after the card entrance finishes (600ms)
+            const typingDelay = 600; 
+            setTimeout(() => {
+                // Ensure the signature is initially hidden
+                messageTextSignature.classList.add('message-text-hidden');
+
+                if (quoteTextContent) {
+                    // Call typewriter effect, passing triggerGrandFinale as the completion callback
+                    typewriterQuoteEffect(messageTextQuote, quoteTextContent, 40, triggerGrandFinale); 
+                }
+            }, typingDelay);
+
+
+            // 4. Scroll down to ensure the message is visible
+            setTimeout(() => {
+                finalMessageArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500); 
+        });
+
+    </script>
+</body>
+</html>
